@@ -4,6 +4,7 @@ import initialContacts from "../../initialContacts.json";
 
 import SearchBox from "../SearchBox/SearchBox";
 import ContactList from "../ContactList/ContactList";
+import ContactForm from "../ContactForm/ContactForm";
 
 function App() {
   const [contacts, setContacts] = useState(initialContacts);
@@ -12,11 +13,19 @@ function App() {
   const visibleContact = contacts.filter((contact) =>
     contact.name.toLowerCase().includes(filter.toLowerCase())
   );
+  const addContact = (newContact) => {
+    setContacts((prevContacts) => {
+      return [...prevContacts, newContact];
+    });
+  };
 
   return (
     <div className={css.container}>
       <h1 className={css.title}>Phonebook</h1>
+      <ContactForm addContact={addContact} />
+      <hr />
       <SearchBox value={filter} onFilter={setFilter} />
+      <hr />
       <ContactList contacts={visibleContact} />
     </div>
   );
