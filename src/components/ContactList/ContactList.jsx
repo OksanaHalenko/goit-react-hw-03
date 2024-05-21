@@ -1,10 +1,10 @@
 import css from "./ContactList.module.css";
 import Contact from "../Contact/Contact";
 
-function ContactList({ initialContacts }) {
+function ContactList({ contacts }) {
   return (
     <div className={css.wrapper}>
-      {initialContacts.map((contact) => (
+      {contacts.map((contact) => (
         <Contact data={contact} key={contact.id} />
       ))}
     </div>
