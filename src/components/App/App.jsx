@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import css from "./App.module.css";
 import initialContacts from "../../initialContacts.json";
 
@@ -7,7 +7,13 @@ import ContactList from "../ContactList/ContactList";
 import ContactForm from "../ContactForm/ContactForm";
 
 function App() {
-  const [contacts, setContacts] = useState(initialContacts);
+  const [contacts, setContacts] = useState(() => {
+    const savedContacts = window.localStorage.getItem("saved-contacts");
+    if (savedContacts !== null) {
+      return JSON.parse(savedContacts);
+    }
+    return initialContacts;
+  });
   const [filter, setFilter] = useState("");
 
   const visibleContact = contacts.filter((contact) =>
@@ -18,6 +24,14 @@ function App() {
       return [...prevContacts, newContact];
     });
   };
+  useEffect(() => {
+    window.localStorage.setItem("saved-contacts", JSON.stringify(contacts));
+  }, [contacts]);
+  const deleteContact = (contactId) => {
+    setContacts((prevContacts) => {
+      return prevContacts.filter((contact) => contact.id !== contactId);
+    });
+  };
 
   return (
     <div className={css.container}>
@@ -26,7 +40,7 @@ function App() {
       <hr />
       <SearchBox value={filter} onFilter={setFilter} />
       <hr />
-      <ContactList contacts={visibleContact} />
+      <ContactList contacts={visibleContact} deleteContact={deleteContact} />
     </div>
   );
 }

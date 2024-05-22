@@ -20,7 +20,7 @@ function ContactForm({ addContact }) {
       id: nanoid(),
       ...value,
     });
-    actions.reset();
+    actions.resetForm();
   };
 
   return (
